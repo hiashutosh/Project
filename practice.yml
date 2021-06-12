@@ -162,4 +162,7 @@
       ec2_instance_info:
         region: "{{ region }}"
       register: ec2info
+    - name: Print info
+      debug: var="ec2info.instances"
+
     tags: ['never', 'create-ec2']
