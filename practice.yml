@@ -141,7 +141,6 @@
              root /var/www/html;
              listen 443 ssl default_server;
              # listen [::]:443 ssl default_server;
-             server_name _;
              ssl_certificate /etc/nginx/ssl/ca.crt;
              ssl_certificate_key /etc/nginx/ssl/ca.key;
              index index.php index.html index.nginx-debian.html;
