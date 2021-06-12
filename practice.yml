@@ -123,32 +123,33 @@
 
           nginx_conf() {
 
+          openssl req -nodes -x509 \
+          -newkey rsa:2048 -keyout /etc/nginx/ssl/ca.key \
+          -out /etc/nginx/ssl/ca.crt -subj \
+          "/C=IN/ST=UP/L=Kanpur/O=testing/OU=root/CN=`hostname -f`/emailAddress=testing2496@gmail.com"
+
           if [[ -e /etc/nginx/sites-available/default ]];
           then
-              sudo rm -rf /etc/nginx/sites-available/default
+            sudo rm -rf /etc/nginx/sites-available/default
           fi
-          cat >> /etc/nginx/sites-available/default << EOF    
+          cat >> /etc/nginx/sites-available/default << EOF
           server {
-            listen 80;
-            listen [::]:80;
-              server_name default_server;
+             listen 80;
+             listen [::]:80;
+             server_name default_server;
 
-              root /var/www/html;
-   
-              index index.php index.html index.nginx-debian.html;
-              server_name _;
-    
-              location / {
+             root /var/www/html;
+             listen 443 ssl default_server;
+             # listen [::]:443 ssl default_server;
+             server_name _;
+             ssl_certificate /etc/nginx/ssl/ca.crt;
+             ssl_certificate_key /etc/nginx/ssl/ca.key;
+             index index.php index.html index.nginx-debian.html;
+             server_name _;
+             location / {
                   try_files \$uri \$uri/ =404;
 
               }
-          }
-          server {
-            listen 443;
-            listen [::]:443;
-            location / {
-                  proxy_pass http://localhost:80/;
-            }
           }
           EOF
           }
