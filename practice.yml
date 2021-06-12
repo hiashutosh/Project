@@ -111,7 +111,7 @@
         vpc_subnet_id: "{{ subnet.subnet.id }}"
         count_tag: "{{ count_tag }}"
         instance_tags:
-          - Name: "{{ intance_name }}"
+            Name: "{{ instance_name }}"
         exact_count: "{{ ec2_no }}"
         key_name: "{{ key_pair }}"
         user_data: |
@@ -122,8 +122,8 @@
           sudo apt install nginx wget -y
 
           nginx_conf() {
-
-          openssl req -nodes -x509 \
+          sudo mkdir -p /etc/nginx/ssl
+          sudo openssl req -nodes -x509 \
           -newkey rsa:2048 -keyout /etc/nginx/ssl/ca.key \
           -out /etc/nginx/ssl/ca.crt -subj \
           "/C=IN/ST=UP/L=Kanpur/O=testing/OU=root/CN=`hostname -f`/emailAddress=testing2496@gmail.com"
@@ -157,9 +157,9 @@
           systemctl start nginx
           systemctl enable nginx
           sudo nginx -s reload
+
     - name: Get Running instance Info
       ec2_instance_info:
         region: "{{ region }}"
       register: ec2info
-    - name: 
     tags: ['never', 'create-ec2']
