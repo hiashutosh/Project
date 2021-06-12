@@ -97,7 +97,7 @@
             cidr_ip: 0.0.0.0/0
             rule_desc: allow all on port 22
       register: sg
-    tags: ['always', 'vpc']
+    tags: ['never', 'create-vpc']
 
   - name: Create ec2 instance
     block:
