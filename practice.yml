@@ -157,11 +157,23 @@
           systemctl start nginx
           systemctl enable nginx
           sudo nginx -s reload
+      register: ec2_new
+# attach new ebs volume to ec2
+    - name: EBS volume
+      ec2_vol:
+        instance: "{{ item.id }}"
+        name: EBS_vol
+        volume_size: 5
+        device_name: /dev/xvdf
+        region: "{{ region }}"
+        volume_type: ssd
+      loop: "{{ ec2_new.instances }}"
 
     - name: Get Running instance Info
       ec2_instance_info:
         region: "{{ region }}"
       register: ec2info
+
     - name: Print info
       debug: var="ec2info.instances"
 
